@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Latent Space — Original reporting, conversations and AI news</title>
+<meta name="description" content="Latent Space: original reporting, podcasts and the daily AI News digest for AI engineers.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#0b5cad">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b5cad'/%3E%3Ctext x='16' y='22' font-family='system-ui' font-weight='700' font-size='18' fill='%23fff' text-anchor='middle'%3ELS%3C/text%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#f3f5f7;--card:#fff;--ink:#0f1c2e;--muted:#5b6b7c;--line:#e3e8ee;
+  --blue:#0b5cad;--blue-soft:#f3f8fd;--blue-line:#bfd6ee;
+  --green:#1d7a3f;--green-soft:#f2f8f3;--green-line:#bcd9c4;--green-fill:#e4f1e6;
+  --red:#c42b2b;--red-soft:#fff5f5;--red-line:#f1c2c2;
+  --r:14px;--rs:10px;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;text-rendering:optimizeLegibility}
+a{color:inherit;text-decoration:none}
+a:hover{text-decoration:underline}
+h1,h2,h3,p{margin:0}
+ul,ol{list-style:none;margin:0;padding:0}
+.page{max-width:1240px;margin:16px auto;padding:20px 32px 24px;background:var(--card);border:1px solid var(--line);border-radius:24px}
+@media (max-width:720px){.page{margin:0;border-radius:0;padding:16px}}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.skip{position:absolute;left:8px;top:-40px;background:var(--blue);color:#fff;padding:8px 12px;border-radius:8px}
+.skip:focus{top:8px}
+
+/* Masthead */
+.masthead{display:flex;align-items:center;gap:24px;padding:10px 0 18px;border-bottom:1px solid var(--line)}
+.wordmark{font-size:30px;font-weight:700;color:var(--blue);letter-spacing:-.02em}
+.tagline{color:var(--muted);font-size:15px;margin-left:auto;margin-right:auto}
+.search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:8px 14px;min-width:170px}
+.search input{border:0;background:transparent;font:inherit;color:var(--ink);outline:none;width:100%}
+.search input::placeholder{color:var(--muted)}
+.search svg{flex:none;color:var(--blue)}
+.btn{display:inline-block;background:var(--blue);color:#fff;font-weight:700;border-radius:999px;padding:10px 20px;border:0;font:inherit;font-weight:700;cursor:pointer}
+.btn:hover{background:#094a8c;text-decoration:none}
+@media (max-width:900px){.tagline{display:none}}
+@media (max-width:600px){.search{display:none}.masthead{gap:12px}.wordmark{margin-right:auto}}
+
+/* Nav */
+.nav{display:flex;align-items:center;gap:6px;padding:10px 0 16px;flex-wrap:wrap}
+.nav>li>a,.nav summary{display:block;padding:8px 14px;font-weight:700;font-size:17px;border-radius:8px;list-style:none;cursor:pointer}
+.nav summary::-webkit-details-marker{display:none}
+.nav summary::after{content:"";display:inline-block;margin-left:6px;border:5px solid transparent;border-top-color:currentColor;vertical-align:-3px}
+.nav>li>a:hover,.nav summary:hover{background:var(--bg);text-decoration:none}
+.nav .current>a{color:var(--blue);box-shadow:inset 0 -3px 0 var(--blue);border-radius:0}
+.nav details{position:relative}
+.nav details[open]>summary{background:var(--bg)}
+.menu{position:absolute;top:100%;left:0;z-index:10;min-width:200px;margin-top:6px;padding:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 32px rgba(15,28,46,.12)}
+.menu a{display:block;padding:8px 12px;border-radius:8px;font-size:15px}
+.menu a:hover{background:var(--bg);text-decoration:none}
+.menu small{display:block;color:var(--muted);font-weight:400}
+.nav-aux{margin-left:auto;color:var(--muted);font-size:15px}
+.nav-aux a:hover{color:var(--ink)}
+@media (max-width:720px){.nav-aux{display:none}.nav>li>a,.nav summary{padding:8px 10px;font-size:16px}}
+
+/* Layout */
+.grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:32px}
+@media (max-width:980px){.grid{grid-template-columns:1fr;gap:24px}}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin:36px 0 14px}
+.section-head h2{font-size:28px;letter-spacing:-.02em}
+.section-head.sm{margin:24px 0 12px}
+.section-head.sm h2{font-size:19px}
+.more{font-weight:700;font-size:15px;white-space:nowrap}
+.more.green{color:var(--green)}.more.blue{color:var(--blue)}.more.red{color:var(--red)}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r)}
+.kicker{font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.kicker.green{color:var(--green)}.kicker.blue{color:var(--blue)}.kicker.red{color:var(--red)}
+.meta{color:var(--muted);font-size:14px}
+.thumb{background:var(--green-fill);border-radius:var(--rs);flex:none}
+
+.lead{border-color:var(--green-line);padding:18px;display:flex;flex-direction:column;gap:12px}
+.lead .media{aspect-ratio:16/6;display:grid;place-items:center;color:var(--green);background:var(--green-fill);border-radius:var(--rs);overflow:hidden}
+.lead .media img{width:100%;height:100%;object-fit:cover;display:block}
+.lead h2{font-size:30px;line-height:1.15;letter-spacing:-.02em}
+.lead .dek{font-size:17px;color:#33414f}
+.lead .row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+@media (max-width:600px){.lead h2{font-size:24px}.lead .media{aspect-ratio:16/9}}
+
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:600px){.pair{grid-template-columns:1fr}}
+.post{border-color:var(--green-line);padding:18px;display:grid;grid-template-columns:120px 1fr;gap:18px}
+.post .thumb{width:120px;aspect-ratio:1}
+.post h3{font-size:20px;line-height:1.25;margin:4px 0 10px}
+@media (max-width:1100px) and (min-width:981px){.post{grid-template-columns:1fr}.post .thumb{width:100%;aspect-ratio:16/9}}
+
+/* AI News rail */
+.rail{background:var(--red-soft);border:1px solid var(--red-line);border-radius:var(--r);padding:18px 18px 12px;align-self:start;position:sticky;top:16px}
+.rail .head{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.rail h2{font-size:28px;letter-spacing:-.02em}
+.rail .sub{color:var(--muted);font-size:14px;margin:2px 0 14px}
+.story{background:var(--card);border:1px solid var(--red-line);border-radius:var(--rs);margin-bottom:12px}
+.story summary{list-style:none;cursor:pointer;padding:14px 16px}
+.story summary::-webkit-details-marker{display:none}
+.story summary h3{font-size:18px;line-height:1.3;margin:2px 0 6px}
+.story summary .meta::after{content:"· more";color:var(--red);font-weight:700}
+.story[open] summary .meta::after{content:"· less"}
+.story .body{padding:0 16px 14px;color:#33414f;font-size:15px;border-top:1px solid var(--line);padding-top:12px}
+.story .body ul{margin-top:8px;display:grid;gap:6px}
+.story .body li a{color:var(--blue)}
+.story .body li span{color:var(--muted)}
+.rail .foot{text-align:center;padding:8px 0 4px}
+@media (max-width:980px){.rail{position:static}}
+
+/* Podcasts */
+.pods{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:32px}
+@media (max-width:980px){.pods{grid-template-columns:1fr;gap:20px}}
+.episodes{border-color:var(--blue-line);background:var(--blue-soft);padding:12px}
+.ep{display:grid;grid-template-columns:96px 1fr;gap:16px;padding:12px;border-radius:var(--rs)}
+.ep+.ep{border-top:1px solid var(--blue-line)}
+.ep .art{width:96px;aspect-ratio:1;background:#dbe8f6;border-radius:var(--rs);display:grid;place-items:center;color:var(--blue);font-size:13px}
+.ep h3{font-size:19px;line-height:1.3;margin:4px 0 8px}
+.ep.hero h3{font-size:22px}
+.shows{border-color:var(--blue-line);background:var(--blue-soft);padding:18px;align-self:start}
+.shows h3{font-size:20px;margin-bottom:10px}
+.shows li{padding:8px 0;border-top:1px solid var(--blue-line);display:flex;justify-content:space-between;gap:8px}
+.shows li:first-child{border-top:0}
+.shows li b{font-weight:700}
+.shows li a{color:var(--blue);white-space:nowrap}
+
+/* Popular */
+.popular{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:980px){.popular{grid-template-columns:1fr}}
+.pop{padding:14px 16px;display:grid;grid-template-columns:64px 1fr;gap:16px;align-items:center;counter-increment:pop}
+.pop .thumb{width:64px;aspect-ratio:1;display:grid;place-items:center;color:var(--green);font-weight:700}
+.pop .thumb::before{content:counter(pop)}
+.pop h3{font-size:18px;line-height:1.3;margin-bottom:4px}
+
+/* Footer */
+footer{margin-top:40px;border-top:1px solid var(--line);padding-top:28px}
+.fgrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:24px}
+.fgrid>div{min-width:0}
+@media (max-width:900px){.fgrid{grid-template-columns:1fr 1fr}.fgrid>div:first-child{grid-column:1/-1}}
+@media (max-width:480px){.fgrid{grid-template-columns:1fr}}
+.fgrid .kicker{color:var(--muted);margin-bottom:8px}
+.fgrid li{padding:3px 0;font-size:16px}
+.fgrid p{color:var(--muted);font-size:15px;margin:8px 0 14px}
+.newsletter{display:flex;gap:8px;max-width:360px}
+.newsletter input{flex:1;font:inherit;padding:9px 14px;border:1px solid var(--line);border-radius:999px;min-width:0}
+.legal{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;color:var(--muted);font-size:14px;margin-top:28px;padding-top:16px;border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="page">
+
+<header class="masthead">
+  <a class="wordmark" href="/" aria-label="Latent Space home">Latent Space</a>
+  <p class="tagline">Original reporting, conversations and AI news</p>
+  <form class="search" role="search" action="/search" method="get">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+    <label class="visually-hidden" for="q">Search</label>
+    <input id="q" name="q" type="search" placeholder="Search" autocomplete="off">
+  </form>
+  <a class="btn" href="/subscribe">Subscribe</a>
+</header>
+
+<nav aria-label="Primary">
+  <ul class="nav">
+    <li class="current"><a href="/">Articles</a></li>
+    <li><a href="/ai-news">AI News</a></li>
+    <li><details><summary>Podcasts</summary>
+      <ul class="menu">
+        <li><a href="/podcast">Latent Space<small>The main show</small></a></li>
+        <li><a href="/podcast/fde">FDE<small>Forward Deployed Engineers</small></a></li>
+        <li><a href="/podcast/aiuc">AIUC<small>AI Underwriting Company</small></a></li>
+        <li><a href="/podcasts">All shows →</a></li>
+      </ul></details></li>
+    <li><a href="/watch">Watch</a></li>
+    <li><details><summary>More</summary>
+      <ul class="menu">
+        <li><a href="/about">About</a></li>
+        <li><a href="/contribute">Contribute</a></li>
+        <li><a href="/archive">Archive</a></li>
+        <li><a href="https://x.com/latentspacepod">X</a></li>
+        <li><a href="https://discord.gg/latentspace">Discord</a></li>
+        <li><a href="https://www.youtube.com/@LatentSpacePod">YouTube</a></li>
+        <li><a href="https://www.linkedin.com/company/latent-space">LinkedIn</a></li>
+      </ul></details></li>
+    <li class="nav-aux"><span><a href="/about">About</a> · <a href="/contribute">Contribute</a> · <a href="/archive">Archive</a> · <a href="/social">Social</a></span></li>
+  </ul>
+</nav>
+
+<main id="main" class="grid">
+  <section aria-labelledby="articles-h">
+    <h2 id="articles-h" class="visually-hidden">Latest articles</h2>
+
+    <article class="card lead">
+      <a class="media" href="/p/inside-an-ai-native-company" aria-hidden="true" tabindex="-1">
+        <span>Lead story image or illustration</span>
+      </a>
+      <p class="kicker green">Analysis</p>
+      <h2><a href="/p/inside-an-ai-native-company">Inside an AI native company: how its agents work</a></h2>
+      <p class="dek">A reported look at the systems, tradeoffs and people behind the work.</p>
+      <div class="row">
+        <p class="meta">By Richard · Sep 18 · 8 min read</p>
+        <a class="more green" href="/p/inside-an-ai-native-company">Read article →</a>
+      </div>
+    </article>
+
+    <div class="section-head sm">
+      <h2>Recent posts</h2>
+      <a class="more green" href="/archive">All articles →</a>
+    </div>
+    <div class="pair">
+      <article class="card post">
+        <a class="thumb" href="/p/ai-robotics-team" aria-hidden="true" tabindex="-1"></a>
+        <div>
+          <p class="kicker green">Interview</p>
+          <h3><a href="/p/ai-robotics-team">What an AI robotics team has built</a></h3>
+          <p class="meta">By Richard · 6 min read</p>
+        </div>
+      </article>
+      <article class="card post">
+        <a class="thumb" href="/p/new-coding-agent-review" aria-hidden="true" tabindex="-1"></a>
+        <div>
+          <p class="kicker green">Review</p>
+          <h3><a href="/p/new-coding-agent-review">A closer look at a new coding agent</a></h3>
+          <p class="meta">By contributor · 9 min read</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <aside class="rail" aria-labelledby="ainews-h">
+    <div class="head">
+      <h2 id="ainews-h">AI News</h2>
+      <a class="more red" href="/ai-news">Open AI News →</a>
+    </div>
+    <p class="sub">Top stories now</p>
+
+    <details class="story" open>
+      <summary>
+        <p class="kicker red">Top story</p>
+        <h3>A major AI release reshapes the developer conversation</h3>
+        <p class="meta">Why people are watching · 12 sources · 18 min ago </p>
+      </summary>
+      <div class="body">
+        <p>Two-paragraph summary of what shipped, who it affects and why it matters, pulled from the daily AI News digest.</p>
+        <ul>
+          <li><a href="#">Official announcement</a> <span>· vendor blog</span></li>
+          <li><a href="#">Early benchmarks and community reactions</a> <span>· X thread</span></li>
+          <li><a href="#">Pricing and availability details</a> <span>· docs</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="story">
+      <summary>
+        <h3>New agent tools bring debate over production readiness</h3>
+        <p class="meta">What changed · 7 sources · 1h ago </p>
+      </summary>
+      <div class="body">
+        <p>Short context on the release plus the strongest arguments on each side.</p>
+        <ul>
+          <li><a href="#">Launch post</a> <span>· company blog</span></li>
+          <li><a href="#">Critical take from a practitioner</a> <span>· newsletter</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="story">
+      <summary>
+        <h3>Researchers publish a fresh benchmark for reasoning</h3>
+        <p class="meta">Early reaction · 6 sources · 2h ago </p>
+      </summary>
+      <div class="body">
+        <p>What the benchmark measures, who topped it and the caveats worth knowing.</p>
+        <ul>
+          <li><a href="#">Paper</a> <span>· arXiv</span></li>
+          <li><a href="#">Leaderboard</a> <span>· project site</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="story">
+      <summary>
+        <h3>Cloud providers compete on inference costs</h3>
+        <p class="meta">Pricing context · 5 sources · 3h ago </p>
+      </summary>
+      <div class="body">
+        <p>Side-by-side pricing moves and what they mean for teams running models at scale.</p>
+        <ul>
+          <li><a href="#">Price change announcement</a> <span>· provider</span></li>
+          <li><a href="#">Cost comparison</a> <span>· analysis</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="story">
+      <summary>
+        <h3>Open-weight model lands with a permissive license</h3>
+        <p class="meta">Ecosystem · 4 sources · 5h ago </p>
+      </summary>
+      <div class="body">
+        <p>Where to get it, how it compares and who has already shipped fine-tunes.</p>
+        <ul>
+          <li><a href="#">Model card</a> <span>· Hugging Face</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <p class="foot"><a class="more red" href="/ai-news">See all stories and source clusters →</a></p>
+  </aside>
+</main>
+
+<section aria-labelledby="podcasts-h">
+  <div class="section-head">
+    <h2 id="podcasts-h">Podcasts</h2>
+    <a class="more blue" href="/podcasts">All shows →</a>
+  </div>
+  <div class="pods">
+    <div class="card episodes">
+      <article class="ep hero">
+        <a class="art" href="/podcast/latest" aria-hidden="true" tabindex="-1">cover art</a>
+        <div>
+          <p class="kicker blue">Latest Latent Space episode</p>
+          <h3><a href="/podcast/latest">Latest conversation or deep dive title goes here</a></h3>
+          <p class="meta"><a href="#">Listen on podcast apps</a> · <a href="#">Watch on YouTube →</a></p>
+        </div>
+      </article>
+      <article class="ep">
+        <a class="art" href="#" aria-hidden="true" tabindex="-1">cover art</a>
+        <div>
+          <h3><a href="#">Previous episode title with a guest name</a></h3>
+          <p class="meta">1h 12m · Sep 11</p>
+        </div>
+      </article>
+      <article class="ep">
+        <a class="art" href="#" aria-hidden="true" tabindex="-1">cover art</a>
+        <div>
+          <h3><a href="#">An earlier episode on evals, agents or infra</a></h3>
+          <p class="meta">58m · Sep 4</p>
+        </div>
+      </article>
+    </div>
+    <aside class="card shows">
+      <h3>Other shows</h3>
+      <ul>
+        <li><b>FDE</b> <a href="/podcast/fde">Latest episode →</a></li>
+        <li><b>AIUC</b> <a href="/podcast/aiuc">Latest episode →</a></li>
+        <li><b>AI Engineer</b> <a href="/podcast/aie">Conference talks →</a></li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section aria-labelledby="popular-h">
+  <div class="section-head">
+    <h2 id="popular-h">Popular posts</h2>
+    <a class="more green" href="/archive">Explore the archive →</a>
+  </div>
+  <ol class="popular">
+    <li class="card pop"><span class="thumb" aria-hidden="true"></span><div><h3><a href="#">Popular original post title</a></h3><p class="meta">Analysis · 12 min read</p></div></li>
+    <li class="card pop"><span class="thumb" aria-hidden="true"></span><div><h3><a href="#">Useful interview from the archive</a></h3><p class="meta">Interview · 10 min read</p></div></li>
+    <li class="card pop"><span class="thumb" aria-hidden="true"></span><div><h3><a href="#">A frequently referenced review</a></h3><p class="meta">Review · 8 min read</p></div></li>
+  </ol>
+</section>
+
+<footer>
+  <div class="fgrid">
+    <div>
+      <a class="wordmark" href="/" style="font-size:24px">Latent Space</a>
+      <p>Get the latest from Latent Space in your inbox.</p>
+      <form class="newsletter" action="/subscribe" method="get">
+        <label class="visually-hidden" for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="you@example.com" required>
+        <button class="btn" type="submit">Subscribe →</button>
+      </form>
+    </div>
+    <div><p class="kicker">Explore</p><ul><li><a href="/">Articles</a></li><li><a href="/ai-news">AI News</a></li><li><a href="/podcasts">Podcasts</a> · <a href="/watch">Watch</a> · <a href="/archive">Archive</a></li></ul></div>
+    <div><p class="kicker">About</p><ul><li><a href="/about">About</a></li><li><a href="/contribute">Contribute</a></li><li><a href="/contact">Contact</a></li></ul></div>
+    <div><p class="kicker">Follow</p><ul><li><a href="https://www.youtube.com/@LatentSpacePod">YouTube</a> · <a href="https://x.com/latentspacepod">X</a></li><li><a href="https://www.linkedin.com/company/latent-space">LinkedIn</a> · <a href="https://discord.gg/latentspace">Discord</a></li><li><a href="/rss">RSS</a></li></ul></div>
+  </div>
+  <div class="legal">
+    <p>© 2026 Latent Space · Desktop wireframe with illustrative headlines</p>
+    <p><a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+  </div>
+</footer>
+
+</div>
+</body>
+</html>
