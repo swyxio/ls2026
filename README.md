@@ -1,3 +1,9 @@
+# DEPRECATED
+
+This prototype has moved to a different repo. Do not build on this one.
+
+---
+
 # ls2026 — Latent Space landing page prototype
 
 Static mockup of the 2026 Latent Space landing page (Richard's wireframe), built performance-first.
